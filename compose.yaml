@@ -1,0 +1,11 @@
+services:
+  floci:
+    image: floci/floci:latest
+    container_name: floci
+    ports:
+      - "4566:4566"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${FLOCI_DATA_DIR:-.floci}:/app/data
+    environment:
+      FLOCI_STORAGE_MODE: ${FLOCI_STORAGE_MODE:-hybrid}

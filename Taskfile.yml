@@ -1,0 +1,48 @@
+version: "3"
+
+vars:
+  FLOCI_DATA_DIR:
+    sh: echo ${FLOCI_DATA_DIR:-.floci}
+
+tasks:
+  up:
+    desc: Start floci container
+    cmds:
+      - docker compose up -d
+
+  down:
+    desc: Stop floci container
+    cmds:
+      - docker compose down
+
+  logs:
+    desc: Tail container logs
+    cmds:
+      - docker compose logs -f
+
+  restart:
+    desc: Restart floci container
+    cmds:
+      - docker compose restart
+
+  ps:
+    desc: Show container status
+    cmds:
+      - docker compose ps
+
+  health:
+    desc: Check health endpoint
+    cmds:
+      - curl -sf http://localhost:4566/_localstack/health | python3 -m json.tool
+
+  clean:
+    desc: Remove all floci data (down + delete data dir)
+    cmds:
+      - task: down
+      - rm -rf {{.FLOCI_DATA_DIR}}
+
+  reset:
+    desc: Full reset (clean + up)
+    cmds:
+      - task: clean
+      - task: up
